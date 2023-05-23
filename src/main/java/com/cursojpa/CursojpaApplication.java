@@ -1,6 +1,5 @@
 package com.cursojpa;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +10,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.cursojpa.domain.Categoria;
 import com.cursojpa.domain.Cidade;
+import com.cursojpa.domain.Cliente;
+import com.cursojpa.domain.Endereco;
 import com.cursojpa.domain.Estado;
 import com.cursojpa.domain.Produto;
+import com.cursojpa.domain.enums.TipoCliente;
 import com.cursojpa.repositories.CategoriaRepository;
 import com.cursojpa.repositories.CidadeRepository;
+import com.cursojpa.repositories.ClienteRepository;
+import com.cursojpa.repositories.EnderecoRepository;
 import com.cursojpa.repositories.EstadoRepository;
 import com.cursojpa.repositories.ProdutoRepository;
 
@@ -31,6 +35,10 @@ public class CursojpaApplication implements CommandLineRunner {
 	private CidadeRepository cidadeRepository;
 	@Autowired
 	private EstadoRepository estadoRepository;
+	@Autowired
+	private ClienteRepository clienteRepository;
+	@Autowired
+	private EnderecoRepository enderecoRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(CursojpaApplication.class, args);
@@ -69,6 +77,18 @@ public class CursojpaApplication implements CommandLineRunner {
 		
 		estadoRepository.saveAll(Arrays.asList(est1,est2));
 		cidadeRepository.saveAll(Arrays.asList(c1,c2,c3));
+		
+		Cliente cli1 = new Cliente(null, "Ana Maria", "maria.ana@gmail.com" , "61266254855", TipoCliente.PESSOA_FISICA);
+		
+		cli1.getTelefones().addAll(Arrays.asList("937523245", "37524166"));
+		
+		Endereco e1 = new Endereco(null, "Rua flores", "250", "casa 20", "Renascença", "65051120", c1, cli1);
+		Endereco e2 = new Endereco(null, "Rua das Mercedes", "20", "casa 224", "Forquilha", "61182004", c2, cli1);
+		
+		cli1.getEnderecos().addAll(Arrays.asList(e1, e2));
+		
+		clienteRepository.saveAll(Arrays.asList(cli1));
+		enderecoRepository.saveAll(Arrays.asList(e1, e2));
 	}
 
 }
